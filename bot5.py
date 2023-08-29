@@ -28,22 +28,24 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 async def chatgpt_query(prompt):
     data = {
-        "model": "gpt-3.5-turbo",
+        "model": "gpt-4",
         "messages": [
             {"role": "system", "content": "You are a helpful assistant that provides videogame info and advice."},
             {"role": "user", "content": prompt}
         ],
-        "max_tokens": 450,
+        "max_tokens": 2000,
         "temperature": 0.8,
+        "top_p": 1,
+        "frequency_penalty": 0,
+        "presence_penalty": 0
     }
     response = requests.post(chatgpt_url, json=data, headers=headers)
     response_json = response.json()
     if "choices" in response_json:
         answer = response_json["choices"][0]["message"]["content"].strip()
     else:
-        answer = "I'm sorry, I couldn't generate an answer. Please try again later."
+        answer = "I'm sorry, I couldn't generate an answer. Please try again later"
     return answer
-
 
 @bot.event
 async def on_ready():
